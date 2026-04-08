@@ -2,6 +2,8 @@
 
 import { useDispatch, useSelector } from 'react-redux'
 import { addFavorite, removeFavorite } from '../rtk/favoriteSlice'
+import Link from 'next/link'
+import {Heart} from 'lucide-react'
 
 export default function MealCard({ meal, category }) {
   const dispatch = useDispatch()
@@ -29,7 +31,7 @@ export default function MealCard({ meal, category }) {
         onClick={toggleFavorite}
         className="absolute top-2 right-2 text-xl"
       >
-        {isFav ? "💚" : "🤍"}
+        <Heart fill={isFav ? 'green' : 'none'} stroke={isFav ? 'green' : 'currentColor'} />
       </button>
 
       <img
@@ -42,13 +44,15 @@ export default function MealCard({ meal, category }) {
       </h3>
 
       <p className="text-sm mt-1">
-        ⭐ {rating} ({rating} favorites)
+        <Heart fill={isFav ? 'green' : 'none'} stroke={isFav ? 'green' : 'currentColor'} /> {rating} ({rating} favorites)
       </p>
 
       <div className="flex justify-end mt-auto">
-        <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1 rounded-full text-sm">
-          View Recipe
-        </button>
+        <Link href={`/Recipe/${meal.idMeal}`}>
+          <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1 rounded-full text-sm">
+            View Recipe
+          </button>
+        </Link>
       </div>
 
     </div>
