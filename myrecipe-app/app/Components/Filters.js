@@ -62,8 +62,7 @@ export default function Filters({ onFilterChange }) {
 
     return (
         <div>
-            <select value={category} onChange={handleCategory}>
-                <option value="">All Categories</option>
+            <select value={category} onChange={handleCategory}> 
                 {Category.map((c) => (
                     <option key={c} value={c}>{c}</option>
                 ))}
