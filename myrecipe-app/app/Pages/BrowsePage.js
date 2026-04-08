@@ -58,7 +58,7 @@ export default function BrowsePage() {
   return (
     <div
       className="min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('/images/bg.png')" }}
+      style={{ backgroundImage: "url('/images/bg_myrecipe.png')" }}
     >
       <div className="max-w-7xl mx-auto px-6 py-8">
         <Filters onFilterChange={setFilters} />
