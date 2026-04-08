@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import MealCard from '../Components/MealCard'
 import Filters from '../Components/Filters'
 import Image from 'next/image'
+import Link from 'next/link'
+
 
 export default function BrowsePage() {
   const [meals, setMeals] = useState([])
