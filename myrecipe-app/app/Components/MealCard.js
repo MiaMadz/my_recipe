@@ -3,7 +3,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { addFavorite, removeFavorite } from '../rtk/favoriteSlice'
 import Link from 'next/link'
-import {Heart} from 'lucide-react'
+import { Heart } from 'lucide-react'
 
 export default function MealCard({ meal, category }) {
   const dispatch = useDispatch()
@@ -27,11 +27,15 @@ export default function MealCard({ meal, category }) {
         {meal.strCategory || category || "Recipe"}
       </span>
 
+      {/* Top-right heart: white fill + green-600 border by default, fully green-600 when favorited */}
       <button
         onClick={toggleFavorite}
         className="absolute top-2 right-2 text-xl"
       >
-        <Heart fill={isFav ? 'green' : 'none'} stroke={isFav ? 'green' : 'currentColor'} />
+        <Heart
+          fill={isFav ? '#16a34a' : 'white'}
+          stroke='#16a34a'
+        />
       </button>
 
       <img
@@ -43,8 +47,14 @@ export default function MealCard({ meal, category }) {
         {meal.strMeal}
       </h3>
 
-      <p className="text-sm mt-1">
-        <Heart fill={isFav ? 'green' : 'none'} stroke={isFav ? 'green' : 'currentColor'} /> {rating} ({rating} favorites)
+      {/* Bottom heart: always green-600 */}
+      <p className="text-sm mt-1 flex items-center gap-1">
+        <Heart
+          fill='#16a34a'
+          stroke='#16a34a'
+          size={16}
+        />
+        {rating} ({rating} favorites)
       </p>
 
       <div className="flex justify-end mt-auto">

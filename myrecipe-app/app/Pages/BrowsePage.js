@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import MealCard from '../Components/MealCard'
-import Filters from '../Components/Filters' // adjust path as needed
+import Filters from '../Components/Filters' 
+
 
 export default function BrowsePage() {
   const [meals, setMeals] = useState([])
