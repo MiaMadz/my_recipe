@@ -1,5 +1,6 @@
 'use client'
 import { useGetRecipeByIdQuery } from '../rtk/recipeApi'
+import styles from './DetailPage.module.css'
 
 export default function DetailPage({ id }) {
     const { data, isLoading, isError } = useGetRecipeByIdQuery(id)
@@ -9,36 +10,70 @@ export default function DetailPage({ id }) {
 
     const meal = data.meals[0]
 
+    // Helper function to get all ingredients and measures
+    const getIngredients = () => {
+        const ingredients = []
+        for (let i = 1; i <= 20; i++) {
+            const ingredient = meal[`strIngredient${i}`]
+            const measure = meal[`strMeasure${i}`]
+            if (ingredient && ingredient.trim()) {
+                ingredients.push({ ingredient, measure })
+            }
+        }
+        return ingredients
+    }
+
+    const ingredients = getIngredients()
+
     return (
-        <div>
-            <img src={meal.strMealThumb} alt={meal.strMeal} />
-            <h1>{meal.strMeal}</h1>
-            <p><strong>Category:</strong> {meal.strCategory}</p>
-            <p><strong>Area:</strong> {meal.strArea}</p> 
-            <h2><strong>Instructions</strong></h2>
-            <p>{meal.strInstructions}</p>
-            <p><strong>Tags:</strong>{meal.strTags}</p>
-            <p><strong>Youtube:</strong>{meal.strYoutube}</p>
-            <p><strong>{meal.strIngredient1}</strong> {meal.strMeasure1}</p>
-            <p><strong>{meal.strIngredient2}</strong> {meal.strMeasure2}</p>
-            <p><strong>{meal.strIngredient3}</strong> {meal.strMeasure3}</p>
-            <p><strong>{meal.strIngredient4}</strong> {meal.strMeasure4}</p>
-            <p><strong>{meal.strIngredient5}</strong> {meal.strMeasure5}</p>
-            <p><strong>{meal.strIngredient6}</strong> {meal.strMeasure6}</p>
-            <p><strong>{meal.strIngredient7}</strong> {meal.strMeasure7}</p>
-            <p><strong>{meal.strIngredient8}</strong> {meal.strMeasure8}</p>
-            <p><strong>{meal.strIngredient9}</strong> {meal.strMeasure9}</p>
-            <p><strong>{meal.strIngredient10}</strong> {meal.strMeasure10}</p>
-            <p><strong>{meal.strIngredient11}</strong> {meal.strMeasure11}</p>
-            <p><strong>{meal.strIngredient12}</strong> {meal.strMeasure12}</p>
-            <p><strong>{meal.strIngredient13}</strong> {meal.strMeasure13}</p>
-            <p><strong>{meal.strIngredient14}</strong> {meal.strMeasure14}</p>
-            <p><strong>{meal.strIngredient15}</strong> {meal.strMeasure15}</p>
-            <p><strong>{meal.strIngredient16}</strong> {meal.strMeasure16}</p>
-            <p><strong>{meal.strIngredient17}</strong> {meal.strMeasure17}</p>
-            <p><strong>{meal.strIngredient18}</strong> {meal.strMeasure18}</p>
-            <p><strong>{meal.strIngredient19}</strong> {meal.strMeasure19}</p>
-            <p><strong>{meal.strIngredient20}</strong> {meal.strMeasure20}</p>
+        <div className={styles.detailContainer}>
+            {/* Back Button */}
+            <button className={styles.backButton}>← BACK</button>
+
+            {/* Main Content */}
+            <div className={styles.mainContent}>
+                {/* Left Section - Image and Info */}
+                <div className={styles.leftSection}>
+                    {/* Image and Title Container */}
+                    <div className={styles.imageContainer}>
+                        <img src={meal.strMealThumb} alt={meal.strMeal} className={styles.recipeImage} />
+                        <h1 className={styles.recipeTitle}>{meal.strMeal}</h1>
+                        
+                        <div className={styles.tags}>
+                            {meal.strCategory && <span className={styles.tag}>{meal.strCategory.toUpperCase()}</span>}
+                            {meal.strArea && <span className={styles.tag}>{meal.strArea.toUpperCase()}</span>}
+                        </div>
+
+                        <button className={styles.addButton}> Add to Favorites </button>
+                    </div>
+                </div>
+
+                {/* Right Section - Ingredients and Instructions */}
+                <div className={styles.rightSection}>
+                    {/* Ingredients */}
+                    <div className={styles.ingredientsSection}>
+                        <h2 className={styles.sectionTitle}>Ingredients</h2>
+                        <div className={styles.ingredientsList}>
+                            {ingredients.map((item, idx) => (
+                                <div key={idx} className={styles.ingredientItem}>
+                                    <span className={styles.ingredientName}>{item.ingredient}</span>
+                                    <span className={styles.ingredientMeasure}>{item.measure}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Instructions */}
+                    <div className={styles.instructionsSection}>
+                        <h2 className={styles.sectionTitle}>Instructions</h2>
+                        <ol className={styles.instructionsList}>
+                            {meal.strInstructions.split('\n').map((step, idx) => (
+                                step.trim() && <li key={idx} className={styles.instructionStep}>{step.trim()}</li>
+                            ))}
+                        </ol>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 
