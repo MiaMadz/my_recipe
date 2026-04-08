@@ -14,7 +14,7 @@ function MealCard({ meal, area }) {
     if (area && fullMeal.strArea !== area) return null
 
     return (
-        <Link href={`/recipe/${fullMeal.idMeal}`}>
+        <Link href={`/Recipe/${fullMeal.idMeal}`}>
             <div>
                 <img src={fullMeal.strMealThumb} alt={fullMeal.strMeal} />
                 <h3>{fullMeal.strMeal}</h3>
