@@ -1,16 +1,21 @@
 'use client'
-import { useGetRecipesByCategoryQuery, useGetRecipeByIdQuery } from '../rtk/recipeApi'
+import {
+  useGetRecipesByCategoryQuery,
+  useGetRecipesByAreaQuery
+} from '../rtk/recipeApi'
 import Link from 'next/link'
 import { useState } from 'react'
 import Filters from '../Components/Filters'
 import { useDispatch, useSelector } from 'react-redux'
 import { addFavorite, removeFavorite } from '../rtk/favoriteSlice'
 
-function MealCard({ meal }) {
+function MealCard({ meal, category }) {
   const dispatch = useDispatch()
-  const favorites = useSelector((state) => state.favorites.favorites)
+  const favorites = useSelector((state) => state.favorites?.favorites || [])
 
   const isFav = favorites.some(f => f.idMeal === meal.idMeal)
+
+  const rating = favorites.filter(f => f.idMeal === meal.idMeal).length
 
   const toggleFavorite = () => {
     if (isFav) {
@@ -21,31 +26,38 @@ function MealCard({ meal }) {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-3 relative">
+    <div className="bg-white rounded-xl shadow-md p-3 relative flex flex-col">
 
-      {/* CATEGORY BADGE */}
       <span className="absolute top-2 left-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full">
-        Recipe
+        {category || "Recipe"}
       </span>
 
-      {/* HEART */}
-      <button onClick={toggleFavorite} className="absolute top-2 right-2 text-xl">
+      <button
+        onClick={toggleFavorite}
+        className="absolute top-2 right-2 text-xl"
+      >
         {isFav ? "💚" : "🤍"}
       </button>
 
-      <Link href={`/recipe/${meal.idMeal}`}>
-        <img src={meal.strMealThumb} className="rounded-lg" />
+      <img
+        src={meal.strMealThumb}
+        className="rounded-lg"
+      />
 
-        <h3 className="font-bold text-green-700 mt-2">
-          {meal.strMeal}
-        </h3>
-      </Link>
+      <h3 className="font-bold text-green-700 mt-2">
+        {meal.strMeal}
+      </h3>
 
-      <p className="text-sm mt-1">⭐ 4.5 (300)</p>
+      <p className="text-sm mt-1">
+        ⭐ {rating} ({rating} favorites)
+      </p>
 
-      <button className="bg-orange-500 text-white px-3 py-1 rounded-full mt-2">
-        View Recipe
-      </button>
+      <div className="flex justify-end mt-auto">
+        <button className="bg-orange-500 text-white px-3 py-1 rounded-full">
+          View Recipe
+        </button>
+      </div>
+
     </div>
   )
 }
@@ -79,7 +91,11 @@ export default function BrowsePage() {
 
       <div className="grid grid-cols-3 gap-6">
         {data.meals.map((meal) => (
-          <MealCard key={meal.idMeal} meal={meal} />
+          <MealCard
+            key={meal.idMeal}
+            meal={meal}
+            category={filter.value}
+          />
         ))}
       </div>
 
