@@ -1,16 +1,19 @@
 'use client'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useGetRecipeByIdQuery } from '../rtk/recipeApi'
 import styles from './DetailPage.module.css'
 
 export default function DetailPage({ id }) {
+    const router = useRouter()
     const { data, isLoading, isError } = useGetRecipeByIdQuery(id)
+    const [isFavorited, setIsFavorited] = useState(false)
 
     if (isLoading) return <p>Loading...</p>
     if (isError)   return <p>Something went wrong.</p>
 
     const meal = data.meals[0]
 
-    // Helper function to get all ingredients and measures
     const getIngredients = () => {
         const ingredients = []
         for (let i = 1; i <= 20; i++) {
@@ -25,32 +28,39 @@ export default function DetailPage({ id }) {
 
     const ingredients = getIngredients()
 
+    const handleFavorite = () => {
+        setIsFavorited(prev => !prev)
+    }
+
     return (
         <div className={styles.detailContainer}>
-            {/* Back Button */}
-            <button className={styles.backButton}>← BACK</button>
+            <button className={styles.backButton} onClick={() => router.push('/Browse')}>← BACK</button>
 
-            {/* Main Content */}
             <div className={styles.mainContent}>
-                {/* Left Section - Image and Info */}
                 <div className={styles.leftSection}>
-                    {/* Image and Title Container */}
                     <div className={styles.imageContainer}>
                         <img src={meal.strMealThumb} alt={meal.strMeal} className={styles.recipeImage} />
                         <h1 className={styles.recipeTitle}>{meal.strMeal}</h1>
                         
-                        <div className={styles.tags}>
-                            {meal.strCategory && <span className={styles.tag}>{meal.strCategory.toUpperCase()}</span>}
-                            {meal.strArea && <span className={styles.tag}>{meal.strArea.toUpperCase()}</span>}
+                        <div className={styles.tagsContainer}>
+                            <div className={styles.tags}>
+                                {meal.strCategory && <span className={styles.tag}>{meal.strCategory.toUpperCase()}</span>}
+                                {meal.strArea && <span className={styles.tag}>{meal.strArea.toUpperCase()}</span>}
+                            </div>
+                            <button className={styles.favoriteEmoji} onClick={handleFavorite}>
+                                <span style={{ color: isFavorited ? '#00551C' : '#ccc' }}>♥</span>
+                            </button>
                         </div>
 
-                        <button className={styles.addButton}> Add to Favorites </button>
+                        {meal.strYoutube && (
+                            <a href={meal.strYoutube} target="_blank" rel="noopener noreferrer" className={styles.youtubeButton}>
+                                Watch Here!
+                            </a>
+                        )}
                     </div>
                 </div>
 
-                {/* Right Section - Ingredients and Instructions */}
                 <div className={styles.rightSection}>
-                    {/* Ingredients */}
                     <div className={styles.ingredientsSection}>
                         <h2 className={styles.sectionTitle}>Ingredients</h2>
                         <div className={styles.ingredientsList}>
@@ -63,7 +73,6 @@ export default function DetailPage({ id }) {
                         </div>
                     </div>
 
-                    {/* Instructions */}
                     <div className={styles.instructionsSection}>
                         <h2 className={styles.sectionTitle}>Instructions</h2>
                         <ol className={styles.instructionsList}>
@@ -76,5 +85,4 @@ export default function DetailPage({ id }) {
             </div>
         </div>
     )
-
 }
