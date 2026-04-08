@@ -1,104 +1,109 @@
 'use client'
-import {
-  useGetRecipesByCategoryQuery,
-  useGetRecipesByAreaQuery
-} from '../rtk/recipeApi'
-import Link from 'next/link'
-import { useState } from 'react'
-import Filters from '../Components/Filters'
-import { useDispatch, useSelector } from 'react-redux'
-import { addFavorite, removeFavorite } from '../rtk/favoriteSlice'
 
-function MealCard({ meal, category }) {
-  const dispatch = useDispatch()
-  const favorites = useSelector((state) => state.favorites?.favorites || [])
+import { useState, useEffect } from 'react'
+import MealCard from '../Components/MealCard'
 
-  const isFav = favorites.some(f => f.idMeal === meal.idMeal)
+const Category = ['Seafood', 'Chicken']
 
-  const rating = favorites.filter(f => f.idMeal === meal.idMeal).length
-
-  const toggleFavorite = () => {
-    if (isFav) {
-      dispatch(removeFavorite(meal.idMeal))
-    } else {
-      dispatch(addFavorite(meal))
-    }
-  }
-
-  return (
-    <div className="bg-white rounded-xl shadow-md p-3 relative flex flex-col">
-
-      <span className="absolute top-2 left-2 bg-green-600 text-white text-xs px-2 py-1 rounded-full">
-        {category || "Recipe"}
-      </span>
-
-      <button
-        onClick={toggleFavorite}
-        className="absolute top-2 right-2 text-xl"
-      >
-        {isFav ? "💚" : "🤍"}
-      </button>
-
-      <img
-        src={meal.strMealThumb}
-        className="rounded-lg"
-      />
-
-      <h3 className="font-bold text-green-700 mt-2">
-        {meal.strMeal}
-      </h3>
-
-      <p className="text-sm mt-1">
-        ⭐ {rating} ({rating} favorites)
-      </p>
-
-      <div className="flex justify-end mt-auto">
-        <button className="bg-orange-500 text-white px-3 py-1 rounded-full">
-          View Recipe
-        </button>
-      </div>
-
-    </div>
-  )
-}
+const Area = [
+  'Algerian','American','Argentinian','Australian','British','Canadian','Chinese','Croatian','Dutch',
+  'Egyptian','Filipino','French','Greek','Indian','Irish','Italian','Jamaican','Japanese','Kenyan',
+  'Malaysian','Mexican','Moroccan','Norwegian','Polish','Portuguese','Russian','Saudi Arabian',
+  'Slovakian','Spanish','Syrian','Thai','Tunisian','Turkish','Ukrainian','Uruguayan','Venezulan','Vietnamese'
+]
 
 export default function BrowsePage() {
-  const [filter, setFilter] = useState({
-    type: 'category',
-    value: 'Seafood'
-  })
+  const [meals, setMeals] = useState([])
+  const [category, setCategory] = useState('')
+  const [area, setArea] = useState('')
 
-  const { data: catData, isLoading: catLoading } =
-    useGetRecipesByCategoryQuery(filter.value, {
-      skip: filter.type !== 'category'
-    })
+ const fetchMeals = async () => {
+  try {
+    let url = 'https://www.themealdb.com/api/json/v1/1/search.php?s='
 
-  const { data: areaData, isLoading: areaLoading } =
-    useGetRecipesByAreaQuery(filter.value, {
-      skip: filter.type !== 'area'
-    })
+    if (category) {
+      url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
+    } else if (area) {
+      url = `https://www.themealdb.com/api/json/v1/1/filter.php?a=${area}`
+    }
 
-  const data = filter.type === 'category' ? catData : areaData
-  const isLoading = catLoading || areaLoading
+    const res = await fetch(url)
 
-  if (isLoading) return <p>Loading...</p>
-  if (!data?.meals) return <p>No meals found.</p>
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`)
+    }
+
+    const data = await res.json()
+
+    if (data.meals) {
+      const detailedMeals = await Promise.all(
+        data.meals.map(async (meal) => {
+          const res = await fetch(
+            `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`
+          )
+          const detail = await res.json()
+          return detail.meals[0]
+        })
+      )
+
+      setMeals(detailedMeals)
+    } else {
+      setMeals([])
+    }
+
+  } catch (error) {
+    console.error("Fetch error:", error)
+    setMeals([])
+  }
+}
+  useEffect(() => {
+    fetchMeals()
+  }, [category, area])
 
   return (
-    <div className="p-6">
+    <div
+      className="min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: "url('/bg.png')" }}
+    >
+      <div className="max-w-7xl mx-auto px-6 py-8">
 
-      <Filters onFilterChange={setFilter} />
+        {/* FILTERS */}
+        <div className="flex gap-4 mb-6">
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="p-2 rounded"
+          >
+            <option value="">All Categories</option>
+            {Category.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
 
-      <div className="grid grid-cols-3 gap-6">
-        {data.meals.map((meal) => (
-          <MealCard
-            key={meal.idMeal}
-            meal={meal}
-            category={filter.value}
-          />
-        ))}
+          <select
+            value={area}
+            onChange={(e) => setArea(e.target.value)}
+            className="p-2 rounded"
+          >
+            <option value="">All Areas</option>
+            {Area.map((a) => (
+              <option key={a} value={a}>{a}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* CARDS */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          {meals.length > 0 ? (
+            meals.map((meal) => (
+              <MealCard key={meal.idMeal} meal={meal} category={category} />
+            ))
+          ) : (
+            <p className="text-white text-lg">No meals available</p>
+          )}
+        </div>
+
       </div>
-
     </div>
   )
 }
