@@ -1,9 +1,9 @@
-// BrowsePage.js
 'use client'
 
 import { useState, useEffect } from 'react'
 import MealCard from '../Components/MealCard'
 import Filters from '../Components/Filters'
+import Image from 'next/image'
 
 export default function BrowsePage() {
   const [meals, setMeals] = useState([])
@@ -13,7 +13,6 @@ export default function BrowsePage() {
     try {
       const { category, area } = filters
 
-      // Step 1: Fetch by category first (or all if no category)
       const categoryUrl = category
         ? `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
         : `https://www.themealdb.com/api/json/v1/1/search.php?s=`
@@ -27,7 +26,6 @@ export default function BrowsePage() {
         return
       }
 
-      // Step 2: Fetch full details for each meal (needed to get strArea)
       const detailedMeals = await Promise.all(
         data.meals.map(async (meal) => {
           const res = await fetch(
@@ -38,7 +36,6 @@ export default function BrowsePage() {
         })
       )
 
-      // Step 3: If area is selected, filter client-side by strArea
       const filtered = area
         ? detailedMeals.filter(
             (meal) => meal.strArea?.toLowerCase() === area.toLowerCase()
@@ -70,7 +67,11 @@ export default function BrowsePage() {
               <MealCard key={meal.idMeal} meal={meal} category={filters.category} />
             ))
           ) : (
-            <p className="text-white text-lg">No meals found for this combination</p>
+
+            <div className="col-span-full flex flex-col items-center justify-center mt-6">
+                <Image src="/images/NoRecipeAvailable.png"alt="No recipes available" width={200} height={200}/>
+                <p className="text-black text-xl mt-4">No meals available</p>
+            </div>
           )}
         </div>
       </div>
