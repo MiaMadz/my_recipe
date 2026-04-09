@@ -1,18 +1,24 @@
 'use client'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useDispatch, useSelector } from 'react-redux'
+import { addFavorite, removeFavorite } from '../rtk/favoriteSlice'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useGetRecipeByIdQuery } from '../rtk/recipeApi'
 import styles from './DetailPage.module.css'
 
 export default function DetailPage({ id }) {
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const source = searchParams.get('source')   // ✅ 'browse' or null
+
+    const dispatch = useDispatch()
     const { data, isLoading, isError } = useGetRecipeByIdQuery(id)
-    const [isFavorited, setIsFavorited] = useState(false)
+    const favorites = useSelector((state) => state.favorites.favorites)
 
     if (isLoading) return <p>Loading...</p>
     if (isError)   return <p>Something went wrong.</p>
 
     const meal = data.meals[0]
+    const isFavorited = favorites.some(f => f.idMeal === meal.idMeal)
 
     const getIngredients = () => {
         const ingredients = []
@@ -29,12 +35,26 @@ export default function DetailPage({ id }) {
     const ingredients = getIngredients()
 
     const handleFavorite = () => {
-        setIsFavorited(prev => !prev)
+        if (isFavorited) {
+            dispatch(removeFavorite(meal.idMeal))
+        } else {
+            dispatch(addFavorite(meal))
+        }
+    }
+
+    // ✅ smart back navigation
+    const handleBack = () => {
+        if (source === 'browse') {
+            router.push('/Browse')
+        } else {
+            router.back()
+        }
     }
 
     return (
         <div className={styles.detailContainer}>
-            <button className={styles.backButton} onClick={() => router.push('/Browse')}>← BACK</button>
+            {/* ✅ updated back button */}
+            <button className={styles.backButton} onClick={handleBack}>← BACK</button>
 
             <div className={styles.mainContent}>
                 <div className={styles.leftSection}>
@@ -48,7 +68,7 @@ export default function DetailPage({ id }) {
                                 {meal.strArea && <span className={styles.tag}>{meal.strArea.toUpperCase()}</span>}
                             </div>
                             <button className={styles.favoriteEmoji} onClick={handleFavorite}>
-                                <span style={{ color: isFavorited ? '#00551C' : '#ccc' }}>♥</span>
+                                <span style={{ color: isFavorited ? '#16a34a' : '#ccc' }}>♥</span>
                             </button>
                         </div>
 

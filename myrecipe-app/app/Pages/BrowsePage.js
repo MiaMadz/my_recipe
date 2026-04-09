@@ -6,7 +6,6 @@ import Filters from '../Components/Filters'
 import Image from 'next/image'
 import Link from 'next/link'
 
-
 export default function BrowsePage() {
   const [meals, setMeals] = useState([])
   const [filters, setFilters] = useState({ category: 'Seafood', area: '' })
@@ -28,21 +27,28 @@ export default function BrowsePage() {
         return
       }
 
+      // ✅ limit to first 20 meals to avoid rate limiting
+      const limitedMeals = data.meals.slice(0, 20)
+
       const detailedMeals = await Promise.all(
-        data.meals.map(async (meal) => {
+        limitedMeals.map(async (meal) => {
           const res = await fetch(
             `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`
           )
+          if (!res.ok) return null  // ✅ handle individual failures gracefully
           const detail = await res.json()
-          return detail.meals[0]
+          return detail.meals?.[0] || null
         })
       )
 
+      // ✅ filter out any null results from failed fetches
+      const validMeals = detailedMeals.filter(Boolean)
+
       const filtered = area
-        ? detailedMeals.filter(
+        ? validMeals.filter(
             (meal) => meal.strArea?.toLowerCase() === area.toLowerCase()
           )
-        : detailedMeals
+        : validMeals
 
       setMeals(filtered)
     } catch (error) {
@@ -66,13 +72,12 @@ export default function BrowsePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-6">
           {meals.length > 0 ? (
             meals.map((meal) => (
-              <MealCard key={meal.idMeal} meal={meal} category={filters.category} />
+              <MealCard key={meal.idMeal} meal={meal} category={filters.category} source="browse" />
             ))
           ) : (
-
             <div className="col-span-full flex flex-col items-center justify-center mt-6">
-                <Image src="/images/NoRecipeAvailable.png"alt="No recipes available" width={200} height={200}/>
-                <p className="text-black text-xl mt-4">No meals available</p>
+              <Image src="/images/NoRecipeAvailable.png" alt="No recipes available" width={200} height={200}/>
+              <p className="text-black text-xl mt-4">No meals available</p>
             </div>
           )}
         </div>

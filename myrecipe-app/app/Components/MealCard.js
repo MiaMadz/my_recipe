@@ -5,7 +5,7 @@ import { addFavorite, removeFavorite } from '../rtk/favoriteSlice'
 import Link from 'next/link'
 import { Heart } from 'lucide-react'
 
-export default function MealCard({ meal, category }) {
+export default function MealCard({ meal, category, source }) {
   const dispatch = useDispatch()
   const favorites = useSelector((state) => state.favorites?.favorites || [])
 
@@ -27,7 +27,6 @@ export default function MealCard({ meal, category }) {
         {meal.strCategory || category || "Recipe"}
       </span>
 
-      {/* Top-right heart: white fill + green-600 border by default, fully green-600 when favorited */}
       <button
         onClick={toggleFavorite}
         className="absolute top-2 right-2 text-xl"
@@ -47,7 +46,6 @@ export default function MealCard({ meal, category }) {
         {meal.strMeal}
       </h3>
 
-      {/* Bottom heart: always green-600 */}
       <p className="text-sm mt-1 flex items-center gap-1">
         <Heart
           fill='#16a34a'
@@ -58,7 +56,8 @@ export default function MealCard({ meal, category }) {
       </p>
 
       <div className="flex justify-end mt-auto">
-        <Link href={`/Recipe/${meal.idMeal}`}>
+        {/* ✅ conditionally append ?source=browse */}
+        <Link href={`/Recipe/${meal.idMeal}${source ? `?source=${source}` : ''}`}>
           <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1 rounded-full text-sm">
             View Recipe
           </button>
