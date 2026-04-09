@@ -59,13 +59,23 @@ export default function FavoritePage() {
       style={{ backgroundImage: "url('/images/bg1.png')" }}
     >
       <div className="max-w-7xl mx-auto px-6 py-8">
+
+        <div className="flex justify-between items-center mb-4">
           <h1
-            className={`${dancing.className} text-4xl text-green-800 mb-4`}
+            className={`${dancing.className} text-4xl text-green-800`}
             style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)' }}
           >
             Favorite Dishes
           </h1>
-        <div className="flex justify-between items-center mb-6">
+          <button
+            onClick={() => router.back()}
+            className="text-green-800 font-medium tracking-wide hover:text-green-600 transition"
+          >
+            ← BACK
+          </button>
+        </div>
+
+        <div className="mb-6">
           <div style={wrapperStyle}>
             <select
               value={selectedCategory}
@@ -78,13 +88,6 @@ export default function FavoritePage() {
             </select>
             <ChevronDown size={16} style={iconStyle} />
           </div>
-
-          <button
-            onClick={() => router.back()}
-            className="text-green-800 font-medium tracking-wide hover:text-green-600 transition"
-          >
-            ← BACK
-          </button>
         </div>
 
         {filteredFavorites.length === 0 ? (
