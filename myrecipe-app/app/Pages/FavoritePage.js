@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { useSelector } from "react-redux"
 import { useRouter } from "next/navigation"
-import { ChevronDown } from 'lucide-react'
 import Image from 'next/image'
 import MealCard from "../Components/MealCard"
 import { Dancing_Script } from 'next/font/google'
@@ -29,28 +28,16 @@ export default function FavoritePage() {
   const selectStyle = {
     appearance: 'none',
     WebkitAppearance: 'none',
+    MozAppearance: 'none',
     padding: '8px 40px 8px 16px',
     borderRadius: '10px',
     color: 'white',
-    background: '#16A34A',
+    background: `#16A34A url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 12px center`,
     fontSize: '14px',
     fontWeight: '500',
     cursor: 'pointer',
     border: 'none',
     outline: 'none',
-  }
-
-  const wrapperStyle = {
-    position: 'relative',
-    display: 'flex',
-    alignItems: 'center',
-  }
-
-  const iconStyle = {
-    position: 'absolute',
-    right: '12px',
-    color: 'white',
-    pointerEvents: 'none',
   }
 
   return (
@@ -76,18 +63,15 @@ export default function FavoritePage() {
         </div>
 
         <div className="mb-6">
-          <div style={wrapperStyle}>
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              style={selectStyle}
-            >
-              {categories.map((c) => (
-                <option key={c} value={c}>{c}</option>
-              ))}
-            </select>
-            <ChevronDown size={16} style={iconStyle} />
-          </div>
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            style={selectStyle}
+          >
+            {categories.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
         </div>
 
         {filteredFavorites.length === 0 ? (
