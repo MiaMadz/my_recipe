@@ -13,7 +13,6 @@ export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
 
-    // favorite count from main
     const favorites = useSelector((state) => state.favorites?.favorites || [])
 
     useEffect(() => { setMounted(true) }, [])
@@ -26,7 +25,7 @@ export default function Navbar() {
 
     const navLink = (to, label) => (
         <Link href={to} style={{
-            fontSize: '15px',
+            fontSize: '18px',
             fontWeight: '500',
             color: '#358D52',
             textDecoration: 'none',
@@ -40,13 +39,16 @@ export default function Navbar() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '14px 40px',
+            padding: '20px 40px',
             background: '#fff',
-            borderBottom: '1px solid #eee',
+            borderBottom: '2px solid #358D52',
             boxShadow: '0 1px 4px rgba(0,0,0,0.06)',
+            position: 'sticky',
+            top: '0',
+            zIndex: '9999'
         }}>
             <Link href="/HomePage" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
-                <Image src="/images/Logo.png" alt="MyRecipe Logo" width={230} height={230} />
+                <Image src="/images/Logo.png" alt="MyRecipe Logo" width={250} height={250} />
             </Link>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
@@ -54,9 +56,8 @@ export default function Navbar() {
                 {navLink('/Browse', 'Browse')}
                 {navLink('/About', 'About')}
 
-                {/* Heart with favorite count */}
                 <Link href="/Favorite" style={{ position: 'relative', color: '#358D52' }}>
-                    <Heart size={20} />
+                    <Heart size={23} />
                     {mounted && favorites.length > 0 && (
                         <span style={{
                             position: 'absolute',
@@ -78,7 +79,6 @@ export default function Navbar() {
                     )}
                 </Link>
 
-                {/* Search */}
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                     <div style={{
                         display: 'flex',
@@ -94,7 +94,7 @@ export default function Navbar() {
                             onClick={() => setIsOpen(!isOpen)}
                             style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#358D52' }}
                         >
-                            <Search size={20} />
+                            <Search size={23} />
                         </button>
 
                         <input

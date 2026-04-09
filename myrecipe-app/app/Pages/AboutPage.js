@@ -2,9 +2,7 @@ export default function AboutPage() {
   return (
     <div
       className="w-full min-h-screen bg-cover bg-center relative"
-      style={{
-        backgroundImage: "url('/images/bg_myrecipe.png')",
-      }}
+      style={{backgroundImage: "url('/images/bg1.png')"}}
     >
       <div
         className="
@@ -44,7 +42,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* LOWER TEXT - RIGHT SIDE BUT LEFT-ALIGNED */}
       <section className="w-full flex justify-end px-6 sm:px-10 md:px-16 lg:px-48 mt-50 md:-mt-60">
         <p className="
           text-gray-700 

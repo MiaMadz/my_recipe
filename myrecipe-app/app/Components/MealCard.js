@@ -46,17 +46,16 @@ export default function MealCard({ meal, category, source }) {
         {meal.strMeal}
       </h3>
 
-      <p className="text-sm mt-1 flex items-center gap-1">
+      <p className="text-sm mt-1 flex items-center gap-1 text-black px-2">
         <Heart
           fill='#16a34a'
           stroke='#16a34a'
           size={16}
         />
-        {rating} ({rating} favorites)
+        {rating} favorites
       </p>
 
       <div className="flex justify-end mt-auto">
-        {/* ✅ conditionally append ?source=browse */}
         <Link href={`/Recipe/${meal.idMeal}${source ? `?source=${source}` : ''}`}>
           <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1 rounded-full text-sm">
             View Recipe
