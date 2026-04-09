@@ -49,14 +49,12 @@
     align-items: start;
 }
 
-/* Left Section */
 .leftSection {
     display: flex;
     flex-direction: column;
     gap: 30px;
 }
 
-/* Image and Title Container */
 .imageContainer {
     display: flex;
     flex-direction: column;
@@ -165,7 +163,6 @@
     background-color: #00551C;
 }
 
-/* Right Section */
 .rightSection {
     display: flex;
     flex-direction: column;
@@ -233,7 +230,6 @@
     font-weight: 600;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .mainContent {
         grid-template-columns: 1fr;
