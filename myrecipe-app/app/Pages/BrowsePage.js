@@ -27,7 +27,6 @@ export default function BrowsePage() {
         return
       }
 
-      // ✅ limit to first 20 meals to avoid rate limiting
       const limitedMeals = data.meals.slice(0, 20)
 
       const detailedMeals = await Promise.all(
@@ -35,13 +34,12 @@ export default function BrowsePage() {
           const res = await fetch(
             `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`
           )
-          if (!res.ok) return null  // ✅ handle individual failures gracefully
+          if (!res.ok) return null  
           const detail = await res.json()
           return detail.meals?.[0] || null
         })
       )
 
-      // ✅ filter out any null results from failed fetches
       const validMeals = detailedMeals.filter(Boolean)
 
       const filtered = area
