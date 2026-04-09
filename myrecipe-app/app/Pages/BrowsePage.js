@@ -12,10 +12,7 @@ function MealCard({ meal, area, searchQuery }) {
 
     const fullMeal = data.meals[0]
 
-    // filter by area
     if (area && fullMeal.strArea !== area) return null
-
-    // filter by search query
     if (searchQuery && !fullMeal.strMeal.toLowerCase().includes(searchQuery.toLowerCase())) return null
 
     return (
@@ -40,39 +37,44 @@ export default function BrowsePage() {
         return () => clearTimeout(timeout)
     }, [searchQuery])
 
-    // fetch both categories always, since search needs to cover both
     const { data: seafoodData, isLoading: seafoodLoading } = useGetRecipesByCategoryQuery('Seafood')
     const { data: chickenData, isLoading: chickenLoading } = useGetRecipesByCategoryQuery('Chicken')
 
     const isLoading = seafoodLoading || chickenLoading
 
-    // when searching, combine both categories
-    // when not searching, use the selected filter category
     const meals = debouncedSearch
         ? [...(seafoodData?.meals || []), ...(chickenData?.meals || [])]
         : filters.category === 'Chicken'
             ? chickenData?.meals || []
             : seafoodData?.meals || []
 
+    const visibleMeals = meals.filter(meal =>
+        !debouncedSearch || meal.strMeal.toLowerCase().includes(debouncedSearch.toLowerCase())
+    )
+
     if (isLoading) return <p>Loading...</p>
 
     return (
         <div>
-            {<Filters onFilterChange={setFilters} />}
+            <Filters onFilterChange={setFilters} />
 
             {debouncedSearch && (
                 <p>Showing results for: <strong>{debouncedSearch}</strong></p>
             )}
 
             <div>
-                {meals.map((meal) => (
-                    <MealCard
-                        key={meal.idMeal}
-                        meal={meal}
-                        area={filters.area}
-                        searchQuery={debouncedSearch}
-                    />
-                ))}
+                {visibleMeals.length === 0 && debouncedSearch ? (
+                    <p>No meals found for "{debouncedSearch}"</p>
+                ) : (
+                    visibleMeals.map((meal) => (
+                        <MealCard
+                            key={meal.idMeal}
+                            meal={meal}
+                            area={filters.area}
+                            searchQuery={debouncedSearch}
+                        />
+                    ))
+                )}
             </div>
         </div>
     )
