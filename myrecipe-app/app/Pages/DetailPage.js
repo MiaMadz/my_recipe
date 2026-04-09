@@ -8,7 +8,7 @@ import styles from './DetailPage.module.css'
 export default function DetailPage({ id }) {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const source = searchParams.get('source')   // ✅ 'browse' or null
+    const source = searchParams.get('source')  
 
     const dispatch = useDispatch()
     const { data, isLoading, isError } = useGetRecipeByIdQuery(id)
@@ -42,7 +42,6 @@ export default function DetailPage({ id }) {
         }
     }
 
-    // ✅ smart back navigation
     const handleBack = () => {
         if (source === 'browse') {
             router.push('/Browse')
@@ -53,7 +52,7 @@ export default function DetailPage({ id }) {
 
     return (
         <div className={styles.detailContainer}>
-            {/* ✅ updated back button */}
+            
             <button className={styles.backButton} onClick={handleBack}>← BACK</button>
 
             <div className={styles.mainContent}>
