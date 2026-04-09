@@ -6,6 +6,12 @@ import { useRouter } from "next/navigation"
 import { ChevronDown } from 'lucide-react'
 import Image from 'next/image'
 import MealCard from "../Components/MealCard"
+import { Dancing_Script } from 'next/font/google'
+
+const dancing = Dancing_Script({
+  subsets: ['latin'],
+  weight: ['700'],
+})
 
 const categories = ['All', 'Seafood', 'Chicken']
 
@@ -53,7 +59,12 @@ export default function FavoritePage() {
       style={{ backgroundImage: "url('/images/bg1.png')" }}
     >
       <div className="max-w-7xl mx-auto px-6 py-8">
-
+          <h1
+            className={`${dancing.className} text-4xl text-green-800 mb-4`}
+            style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)' }}
+          >
+            Favorite Dishes
+          </h1>
         <div className="flex justify-between items-center mb-6">
           <div style={wrapperStyle}>
             <select
