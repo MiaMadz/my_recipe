@@ -26,20 +26,36 @@
     margin-right: auto;
 }
 
+.headerRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto 30px auto;
+    padding: 0;
+}
+
+.pageTitle {
+    font-size: 2.2rem;
+    color: #166534;
+    margin: 0;
+}
+
 .backButton {
     background: none;
     border: none;
-    color: #666;
-    font-size: 16px;
+    color: #166534;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
     cursor: pointer;
     padding: 10px 0;
-    margin-bottom: 30px;
-    margin-left: 150px;
-    transition: color 0.3s ease;
+    transition: color 0.2s ease;
+    margin: 0;
 }
 
 .backButton:hover {
-    color: #4CAF50;
+    color: #16a34a;
 }
 
 .mainContent {

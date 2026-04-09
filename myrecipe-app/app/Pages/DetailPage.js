@@ -3,7 +3,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addFavorite, removeFavorite } from '../rtk/favoriteSlice'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useGetRecipeByIdQuery } from '../rtk/recipeApi'
+import { Dancing_Script } from 'next/font/google'
 import styles from './DetailPage.module.css'
+
+const dancing = Dancing_Script({
+  subsets: ['latin'],
+  weight: ['700'],
+})
 
 export default function DetailPage({ id }) {
     const router = useRouter()
@@ -52,7 +58,13 @@ export default function DetailPage({ id }) {
 
     return (
         <div className={styles.detailContainer}>
-            <button className={styles.backButton} onClick={handleBack}>← BACK</button>
+
+            <div className={styles.headerRow}>
+                <h2 className={`${dancing.className} ${styles.pageTitle}`}>
+                    Recipe for {meal.strMeal}
+                </h2>
+                <button className={styles.backButton} onClick={handleBack}>← BACK</button>
+            </div>
 
             <div className={styles.mainContent}>
                 <div className={styles.leftSection}>
