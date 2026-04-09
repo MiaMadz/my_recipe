@@ -22,7 +22,6 @@ export default function FavoritePage() {
       <div className="max-w-7xl mx-auto px-6 py-8">
 
         <div className="flex justify-between items-center mb-6">
-          {/* ✅ Dancing Script font - cursive and elegant */}
           <h1 className={`${dancing.className} text-4xl text-green-800 drop-shadow-md`}>
             Favorite Dishes
           </h1>
