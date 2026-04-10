@@ -1,9 +1,10 @@
+import { Suspense } from 'react'
 import BrowsePage from '../Pages/BrowsePage'
 
-export default function Home() {
+export default function Browse() {
     return (
-        <main>
+        <Suspense fallback={<p>Loading...</p>}>
             <BrowsePage />
-        </main>
+        </Suspense>
     )
 }
