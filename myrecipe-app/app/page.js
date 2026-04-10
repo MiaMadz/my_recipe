@@ -1,9 +1,9 @@
-import BrowsePage from './Pages/BrowsePage'
+import HomePage from './Pages/HomePage'
 
 export default function Home() {
     return (
         <main>
-            <Home />
+            <HomePage />
         </main>
     )
 }

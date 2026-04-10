@@ -30,7 +30,7 @@ export default function Navbar() {
             color: '#358D52',
             textDecoration: 'none',
             padding: '4px 0',
-            borderBottom: pathname === to ? '2px solid #7ABA30' : '2px solid transparent',
+            borderBottom: pathname === to || (to === '/Home' && pathname === '/') ? '2px solid #7ABA30' : '2px solid transparent',
         }}>{label}</Link>
     )
 
