@@ -47,7 +47,7 @@ export default function Navbar() {
             top: '0',
             zIndex: '9999'
         }}>
-            <Link href="/HomePage" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
+            <Link href="/Home" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}>
                 <Image src="/images/Logo.png" alt="MyRecipe Logo" width={250} height={250} />
             </Link>
 

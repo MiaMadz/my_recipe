@@ -2,13 +2,15 @@ export default function AboutPage() {
   return (
     <div
       className="w-full min-h-screen bg-cover bg-center relative"
-      style={{backgroundImage: "url('/images/bg1.png')"}}
+      style={{
+        backgroundImage: "url('/images/bg1.png')",
+      }}
     >
       <div
         className="
           absolute 
           top-10 sm:top-12 md:top-16 
-          left-0 sm:left-5 md:left-10 
+          left-7 sm:left-11 md:left-14
           w-[95%] sm:w-[75%] md:w-[90%] lg:w-[97%] 
           h-[180px] sm:h-[220px] md:h-[260px] lg:h-[300px]
         "
@@ -35,26 +37,21 @@ export default function AboutPage() {
           </h1>
 
           <p className="text-gray-700 text-sm sm:text-base leading-relaxed relative z-10">
-            Lorem Ipsum chỉ đơn giản là một đoạn văn bản giả, được dùng vào
-            việc trình bày và dàn trang phục phục vụ cho in ấn. Lorem Ipsum
-            đã được sử dụng như một văn bản chuẩn cho ngành
+            Welcome to MyRecipe! We provide a collection of carefully selected recipes from different cuisines around the world. 
+            Each recipe includes instructions and ingredients to make your cooking experience smooth and enjoyable. 
           </p>
         </div>
       </section>
 
-      <section className="w-full flex justify-end px-6 sm:px-10 md:px-16 lg:px-48 mt-50 md:-mt-60">
-        <p className="
-          text-gray-700 
-          text-base sm:text-lg 
-          leading-relaxed 
-          max-w-full sm:max-w-md md:max-w-lg lg:max-w-xl 
-          text-left
-        ">
-          Lorem Ipsum chỉ đơn giản là một đoạn văn bản giả, được dùng vào
-          việc trình bày và dàn trang phục phục vụ cho in ấn. Lorem Ipsum
-          đã được sử dụng như một văn bản chuẩn cho ngành
+    <section className="w-full max-w-[90%] mx-auto flex justify-start px-6 sm:px-10 md:px-15 mt-10 md:-mt-58">
+      <div className="w-full md:w-3/5 md:ml-auto md:pl-4">
+        <p className="text-gray-700 text-sm sm:text-base leading-relaxed relative z-10 text-left">
+          We believe that cooking should be fun, easy, and accessible for everyone. 
+          Our platform is designed to inspire you every step of the way. 
+          Let MyRecipe be part of your kitchen journey.
         </p>
-      </section>
+      </div>
+    </section>
     </div>
   );
 }
